@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, List, ListItem } from 'semantic-ui-react';
 
 //Components
 import WarningModal from './Components/WarningModal';
@@ -39,12 +39,12 @@ function App() {
           <Button.Content hidden>
             <Icon name='arrow right' />
           </Button.Content>
-        </Button>{' '}
-        <ul>
-          {users.map((o) => {
-            return <li key={o.id}> {o.employee_name} </li>;
-          })}
-        </ul>
+        </Button>
+        <List>
+          {users.map((o) => (
+            <List.Item key={o.id}>{o.employee_name}</List.Item>
+          ))}
+        </List>
         <WarningModal />
       </Provider>
     </div>
