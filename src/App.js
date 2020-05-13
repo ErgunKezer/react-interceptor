@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Button, Icon, List, ListItem } from 'semantic-ui-react';
+import { Button, Icon, List, Grid, Header } from 'semantic-ui-react';
 
 //Components
 import WarningModal from './Components/WarningModal';
@@ -16,35 +16,44 @@ Interceptor.interceptor(store);
 
 function App() {
   const [users, setUsers] = useState([]);
+  const errorURL = 'http://dummy.restapiexample.com/api/v1/employees1';
+  const trueURL = 'http://dummy.restapiexample.com/api/v1/employees';
   useEffect(() => {
-    ServiceBase.get('http://dummy.restapiexample.com/api/v1/employees').then(
-      (next) => {
-        setUsers(next.data.data);
-      }
-    );
+    getData(trueURL);
   }, []);
 
-  const getData = () => {
-    ServiceBase.get('http://dummy.restapiexample.com/api/v1/employees1').then(
-      (next) => {
-        setUsers(next.data.data);
-      }
-    );
+  const getData = (url) => {
+    ServiceBase.get(url).then((next) => {
+      setUsers(next.data.data);
+    });
   };
   return (
     <div className='main'>
       <Provider store={store}>
-        <Button animated onClick={getData}>
-          <Button.Content visible>Next</Button.Content>
-          <Button.Content hidden>
-            <Icon name='arrow right' />
-          </Button.Content>
-        </Button>
-        <List>
-          {users.map((o) => (
-            <List.Item key={o.id}>{o.employee_name}</List.Item>
-          ))}
-        </List>
+        <Grid columns={2} divided className='w-100'>
+          <Grid.Column className='center-items'>
+            <Header as='h1' className='transform-vertical'>
+              Expected Response
+            </Header>
+            <List>
+              {users.map((o) => (
+                <List.Item key={o.id}>{o.employee_name}</List.Item>
+              ))}
+            </List>
+          </Grid.Column>
+          <Grid.Column className='center-items'>
+            <Button
+              animated
+              onClick={getData.bind(this, errorURL)}
+              color='google plus'>
+              <Button.Content visible>Call error API</Button.Content>
+              <Button.Content hidden>
+                <Icon name='arrow right' />
+              </Button.Content>
+            </Button>
+          </Grid.Column>
+        </Grid>
+
         <WarningModal />
       </Provider>
     </div>
